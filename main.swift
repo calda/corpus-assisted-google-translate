@@ -2,6 +2,7 @@
 
 import Foundation
 
+
 let stringsFileName = "Window Spanish Translations.strings"
 let destinationLanguage = "es"
 
@@ -32,5 +33,10 @@ if let existingCloudTranslatedStrings = readStringsFile(cloudTranslatedStringsFi
     writeStringsFile(cloudTranslatedStringsFileName, with: cloudTranslatedStrings)
     print("Automatically cloud-translated \(cloudTranslatedStrings.count) strings to \(destinationLanguage)")
 }
+
+
+print(bleuScore(
+    referenceCorpus: strings,
+    machineTranslatedCorpus: cloudTranslatedStrings))
 
 
