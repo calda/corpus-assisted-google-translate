@@ -14,10 +14,10 @@ struct StringsEntry {
 }
 
 
-func readStringsFile(_ name: String) -> [StringsEntry] {
-    let url = URL(fileURLWithPath: "\(FileManager.default.currentDirectoryPath)/\(name)")
-    let data = try! Data(contentsOf: url)
-    let textContent = String(data: data, encoding: .utf16)!
+func readStringsFile(_ name: String) -> [StringsEntry]? {
+    guard let textContent = readFileIfPresent(name, using: .utf16) else {
+        return nil
+    }
     
     var entries = [StringsEntry]()
     var commentsForInProgressEntry = [String]()
