@@ -69,8 +69,9 @@ func randomChar() -> UInt8 {
 // END HELPERS
 
 var GENETIC_ALGORITHM_DNA_SIZE = 50
+var GENETIC_ALGORITHM_VERBOSE_LOGGING = true
 let POP_SIZE = 50
-let GENERATIONS = 500
+let GENERATIONS = 100
 let MUTATION_CHANCE = 100
 
 public var GENETIC_ALGORITHM_FITNESS_FUNCTION: (([Int]) -> Double)!
@@ -151,7 +152,9 @@ func runGeneticAlgorithm() -> [Int] {
     for generation in 0...GENERATIONS {
         //print("Generation \(generation) with random sample: \(String(bytes: population[0], encoding:.ascii)!)")
         
-        print("Generation \(generation) with most fit: \(String(bytes: fittest, encoding:.ascii)!) (score \(calculateFitness(dna: fittest)))")
+        if GENETIC_ALGORITHM_VERBOSE_LOGGING {
+            print("Generation \(generation) with most fit: \(String(bytes: fittest, encoding:.ascii)!) (score \(calculateFitness(dna: fittest)))")
+        }
         
         let weightedPopulation = population.map { individual -> ([UInt8], Double) in
             return (individual, calculateFitness(dna: individual))

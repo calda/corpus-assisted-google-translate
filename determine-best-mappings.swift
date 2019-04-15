@@ -14,8 +14,15 @@ import Foundation
 func determineBestMappings(
     from possibleMappings: [(term: String, possibleMappingsForTerm: [String])],
     referenceCorpus: [StringsEntry],
-    machineTranslatedCorpus: [StringsEntry]) -> [(term: String, mapping: String)]
+    machineTranslatedCorpus: [StringsEntry],
+    verbose: Bool = true)
+    -> [(term: String, mapping: String)]
 {
+    guard possibleMappings.count > 0 else {
+        return []
+    }
+    
+    GENETIC_ALGORITHM_VERBOSE_LOGGING = verbose
     GENETIC_ALGORITHM_DNA_SIZE = possibleMappings.count
     
     // the dna determines the index of each possible mapping to use

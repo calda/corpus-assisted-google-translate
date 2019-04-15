@@ -3,78 +3,133 @@
 import Foundation
 
 
+enum Mode {
+    case crossValidation
+    case learnAndApplyMappings(trainingRatio: Double)
+}
+
+
+/// In an actual production tool these would be command-line arguments
 let stringsFileName = "Window Spanish Translations.strings"
 let destinationLanguage = "es"
+let mode = Mode.crossValidation
 
 
+// load the strings
 guard let inputStrings = readStringsFile(stringsFileName) else {
     fatalError("Could not read Strings file \(stringsFileName)")
 }
 
 // the compiler gets freaked out by the above^ line for some reason,
 // so redeclare this here.
-var referenceCorpus: [StringsEntry] = inputStrings
+let referenceCorpus: [StringsEntry] = inputStrings
 
-var machineTranslatedCorpus = loadCloudTranslatedStrings(
+let machineTranslatedCorpus = loadCloudTranslatedStrings(
     for: referenceCorpus,
     in: stringsFileName,
     to: destinationLanguage)
 
-// shuffle the corpuses by zipping them together
-let shuffledCorpuses = zip(referenceCorpus, machineTranslatedCorpus).shuffled()
-referenceCorpus = shuffledCorpuses.map { $0.0 }
-machineTranslatedCorpus = shuffledCorpuses.map { $0.1 }
-
-
-// separate the data into training and testing sets
-let trainingRatio = 1.0
-
-let referencePartitionIndex = Int(Double(referenceCorpus.count) * trainingRatio)
-let trainingReferenceCorpus = Array(referenceCorpus[..<referencePartitionIndex])
-let testingReferenceCorpus = Array(referenceCorpus[referencePartitionIndex...])
-
-let machineTranslationsPartitionIndex = Int(Double(referenceCorpus.count) * trainingRatio)
-let trainingMachineTranslationCorpus = Array(machineTranslatedCorpus[..<machineTranslationsPartitionIndex])
-let testingMachineTranslationCorpus = Array(machineTranslatedCorpus[machineTranslationsPartitionIndex...])
-
-
-// Identify the important terms in the reference corpus
-// that occur infrequently in the machine translated corpus.
-let importantTermsInReferenceCorpus = importantTerms(
-    in: trainingReferenceCorpus,
-    comparedTo: trainingMachineTranslationCorpus)
-    .map { $0.term }
-
-print("\nIdentified \(importantTermsInReferenceCorpus.count) terms that appear significantly more frequently in the reference translations:\n\(importantTermsInReferenceCorpus)\n")
-
-
-// generate possible mappings from the Machine Translated corpus to the Reference Corpus
-let mappings = importantTermsInReferenceCorpus.compactMap { term in
-    return possibleMappings(
-        for: term,
+func trainBestMappings(
+    referenceCorpus: [StringsEntry],
+    machineTranslatedCorpus: [StringsEntry],
+    testingTrainingRatio: Double,
+    verbose: Bool = true)
+    -> (mappings: [(term: String, mapping: String)],
+        trainingCorpusBleuScore: Double,
+        testingCorpusBleuScore: Double)
+{
+    // shuffle the corpuses by zipping them together
+    let shuffledCorpuses = zip(referenceCorpus, machineTranslatedCorpus).shuffled()
+    let shuffledReferenceCorpus = shuffledCorpuses.map { $0.0 }
+    let shuffledMachineTranslations = shuffledCorpuses.map { $0.1 }
+    
+    // separate the data into training and testing sets
+    let referencePartitionIndex = Int(Double(shuffledReferenceCorpus.count) * testingTrainingRatio)
+    let trainingReferenceCorpus = Array(shuffledReferenceCorpus.prefix(upTo: referencePartitionIndex))
+    let testingReferenceCorpus = Array(shuffledReferenceCorpus.suffix(from: referencePartitionIndex))
+    
+    let machineTranslationsPartitionIndex = Int(Double(shuffledMachineTranslations.count) * testingTrainingRatio)
+    let trainingMachineTranslations = Array(shuffledMachineTranslations.prefix(upTo: machineTranslationsPartitionIndex))
+    let testingMachineTranslations = Array(shuffledMachineTranslations.suffix(from: machineTranslationsPartitionIndex))
+    
+    // Identify the important terms in the reference corpus
+    // that occur infrequently in the machine translated corpus.
+    let importantTermsInReferenceCorpus = importantTerms(
         in: trainingReferenceCorpus,
-        comparedTo: trainingMachineTranslationCorpus)
+        comparedTo: trainingMachineTranslations)
+        .map { $0.term }
+    
+    if verbose {
+        print("\nIdentified \(importantTermsInReferenceCorpus.count) terms that appear significantly more frequently in the reference translations:\n\(importantTermsInReferenceCorpus)\n")
+    }
+    
+    // generate possible mappings from the Machine Translated corpus to the Reference Corpus
+    let mappings = importantTermsInReferenceCorpus.compactMap { term in
+        possibleMappings(
+            for: term,
+            in: trainingReferenceCorpus,
+            comparedTo: trainingMachineTranslations)
+    }
+    
+    if verbose {
+        print("Possible mappings:")
+        mappings.forEach { print("\($0.term) <= \($0.possibleMappingsForTerm)") }
+        
+        print("\nStarting Genetic Algorithm to determine best mappings:")
+    }
+    
+    // Use a Genetic Algorithm to determine the best set of mappings
+    let bestMappings = determineBestMappings(
+        from: mappings,
+        referenceCorpus: trainingReferenceCorpus,
+        machineTranslatedCorpus: trainingMachineTranslations,
+        verbose: verbose)
+    
+    if verbose {
+        print("\nBest mappings:")
+        bestMappings.forEach { print("\($0.term) <= \($0.mapping)") }
+    }
+    
+    return (
+        mappings: bestMappings,
+        
+        trainingCorpusBleuScore: bleuScore(
+            referenceCorpus: trainingReferenceCorpus,
+            machineTranslatedCorpus: applyMappings(bestMappings, to: trainingMachineTranslations)),
+        
+        testingCorpusBleuScore: bleuScore(
+            referenceCorpus: testingReferenceCorpus,
+            machineTranslatedCorpus: applyMappings(bestMappings, to: testingMachineTranslations)))
 }
 
-print("Possible mappings:")
-mappings.forEach { print("\($0.term) <= \($0.possibleMappingsForTerm)") }
-
-print("\nStarting Genetic Algorithm to determine best mappings:")
-
-
-// Use a Genetic Algorithm to determine the best set of mappings
-let bestMappings = determineBestMappings(
-    from: mappings,
-    referenceCorpus: trainingReferenceCorpus,
-    machineTranslatedCorpus: trainingMachineTranslationCorpus)
-
-print("\nBest mappings:")
-bestMappings.forEach { print("\($0.term) <= \($0.mapping)") }
-
-
-// Save the Machine Translated Corpus with the best mappings applied
-let outputFileName = stringsFileName
-    .replacingOccurrences(of: ".strings", with: "-corpus-assisted-translations.strings")
-
-writeStringsFile(outputFileName, with: applyMappings(bestMappings, to: machineTranslatedCorpus))
-print("\nWrote \(outputFileName)")
+switch mode {
+case .crossValidation:
+    print("Training % \t Training Score \t Testing Score")
+    
+    // for every 5% from 0% to 100%, take the average testing and training score of two runs
+    for testingTrainingRatio in stride(from: 0.05, to: 1.05, by: 0.05) {
+        let runCount = 2
+        
+        let runs = (1...runCount).map { _ in
+            trainBestMappings(
+                referenceCorpus: referenceCorpus,
+                machineTranslatedCorpus: machineTranslatedCorpus,
+                testingTrainingRatio: testingTrainingRatio,
+                verbose: false)
+        }
+        
+        let averageTrainingScore = runs.map { $0.trainingCorpusBleuScore }.average()
+        let averageTestingScore = runs.map { $0.testingCorpusBleuScore }.average()
+        print("\(testingTrainingRatio) \t \(averageTrainingScore) \t \(averageTestingScore)")
+    }
+    
+case .learnAndApplyMappings(let trainingRatio):
+    fatalError()
+    // Save the Machine Translated Corpus with the best mappings applied
+    //let outputFileName = stringsFileName
+    //    .replacingOccurrences(of: ".strings", with: "-corpus-assisted-translations.strings")
+    //
+    //writeStringsFile(outputFileName, with: applyMappings(bestMappings, to: machineTranslatedCorpus))
+    //print("\nWrote \(outputFileName)")
+    
+}
