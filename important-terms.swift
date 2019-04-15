@@ -72,12 +72,12 @@ func importantTerms(
 
 /// Finds terms that occur disproportionately frequently
 /// in machine translations of references phrases that do contain the term.
-/// These terms are good potential "translation targets" that could be swapped out
-func possibleTranslationTargets(
+/// These terms are good potential mappings that could be swapped out
+func possibleMappings(
     for term: String,
     in referenceCorpus: [StringsEntry],
     comparedTo machineTranslatedCorpus: [StringsEntry])
-    -> (term: String, translationTargets: [String])?
+    -> (term: String, possibleMappingsForTerm: [String])?
 {
     
     var translationsExpectedToHaveTerm = [StringsEntry]()
@@ -115,7 +115,7 @@ func possibleTranslationTargets(
     
     return (
         term: term,
-        translationTargets: translationTargets
+        possibleMappingsForTerm: translationTargets
             .filter { !$0.isEmpty }
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) })
 }
