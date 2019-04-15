@@ -1,6 +1,7 @@
 import Foundation
 
 // an implementation of the BLEU (bilingual evaluation understudy) algorithm
+// https://en.wikipedia.org/wiki/BLEU
 
 func bleuScore(
     referenceTranslation: String,
@@ -10,8 +11,8 @@ func bleuScore(
     // for short phrases, we have to cap the ngram length at the phrase length
     let ngramLengthToUse = min(min(ngramLength, machineTranslation.words.count), referenceTranslation.words.count)
     
-    let referenceTranslationNgrams = referenceTranslation.lowercased().ngrams(n: ngramLengthToUse)
-    let machineTranslationNgrams = machineTranslation.lowercased().ngrams(n: ngramLengthToUse)
+    let referenceTranslationNgrams = referenceTranslation.ngrams(n: ngramLengthToUse)
+    let machineTranslationNgrams = machineTranslation.ngrams(n: ngramLengthToUse)
     
     let recallSum = machineTranslationNgrams
         .map { referenceTranslationNgrams.contains($0) ? 1 : 0 }

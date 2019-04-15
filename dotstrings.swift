@@ -8,9 +8,9 @@ import Foundation
 
 
 struct StringsEntry {
-    let originalText: String
-    let translatedText: String?
-    let comments: [String]
+    var originalText: String
+    var translatedText: String?
+    var comments: [String]
 }
 
 

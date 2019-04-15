@@ -75,5 +75,22 @@ private func _cloudTranslate(
     }.resume()
     
     semaphore.wait()
-    return cloudTranslatedStrings
+    
+    // Google Translate munges the %@ template syntax, so patch that in
+    return cloudTranslatedStrings.map { entry in
+        var mutableEntry = entry
+        mutableEntry.translatedText = entry.translatedText?
+            .replacingOccurrences(of: "% @", with: " %@")
+            .replacingOccurrences(of: "% d", with: " %d")
+            .replacingOccurrences(of: "% .01f", with: " %.01f")
+            .replacingOccurrences(of: "% d", with: " %d")
+            .replacingOccurrences(of: "% 1 $ @", with: " %1$@")
+            .replacingOccurrences(of: "% 2 $ @", with: " %2$@")
+            .replacingOccurrences(of: "% 3 $ @", with: " %3$@")
+            .replacingOccurrences(of: "% 4 $ @", with: " %4$@")
+            .replacingOccurrences(of: "% 5 $ @", with: " %5$@")
+            .replacingOccurrences(of: " @", with: "%@")
+            .trimmingCharacters(in: .whitespaces)
+        return mutableEntry
+    }
 }
