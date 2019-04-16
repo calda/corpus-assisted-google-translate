@@ -71,7 +71,7 @@ func randomChar() -> UInt8 {
 var GENETIC_ALGORITHM_DNA_SIZE = 50
 var GENETIC_ALGORITHM_VERBOSE_LOGGING = true
 let POP_SIZE = 50
-let GENERATIONS = 100
+var GENETIC_ALGORITHM_GENERATIONS = 100
 let MUTATION_CHANCE = 100
 
 public var GENETIC_ALGORITHM_FITNESS_FUNCTION: (([Int]) -> Double)!
@@ -149,7 +149,7 @@ func runGeneticAlgorithm() -> [Int] {
     var fittest = [UInt8]()
     var maxFitnessSoFar = 0.0
     
-    for generation in 0...GENERATIONS {
+    for generation in 0...GENETIC_ALGORITHM_GENERATIONS {
         //print("Generation \(generation) with random sample: \(String(bytes: population[0], encoding:.ascii)!)")
         
         if GENETIC_ALGORITHM_VERBOSE_LOGGING {

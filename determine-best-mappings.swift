@@ -15,7 +15,8 @@ func determineBestMappings(
     from possibleMappings: [(term: String, possibleMappingsForTerm: [String])],
     referenceCorpus: [StringsEntry],
     machineTranslatedCorpus: [StringsEntry],
-    verbose: Bool = true)
+    verbose: Bool = true,
+    geneticAlgorithmGenerations: Int = 100)
     -> [(term: String, mapping: String)]
 {
     guard possibleMappings.count > 0 else {
@@ -24,6 +25,7 @@ func determineBestMappings(
     
     GENETIC_ALGORITHM_VERBOSE_LOGGING = verbose
     GENETIC_ALGORITHM_DNA_SIZE = possibleMappings.count
+    GENETIC_ALGORITHM_GENERATIONS = geneticAlgorithmGenerations
     
     // the dna determines the index of each possible mapping to use
     func mappings(from dna: [Int]) -> [(term: String, mapping: String)] {
