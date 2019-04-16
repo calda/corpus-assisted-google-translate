@@ -10,7 +10,7 @@ enum Mode {
 
 
 /// In an actual production tool these would be command-line arguments
-let stringsFileName = "Window Spanish Translations.strings"
+let stringsFileName = "strings/Window Spanish Translations.strings"
 let destinationLanguage = "es"
 let mode = Mode.learnAndApplyMappings
 

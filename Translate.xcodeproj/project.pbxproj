@@ -34,9 +34,7 @@
 /* Begin PBXFileReference section */
 		2E0E943E2263B50800FCF6BE /* Translate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Translate; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E0E94472263B54E00FCF6BE /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		2E0E94482263B54E00FCF6BE /* Window French Translations.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "Window French Translations.strings"; sourceTree = "<group>"; };
 		2E0E94492263B54E00FCF6BE /* dotstrings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = dotstrings.swift; sourceTree = "<group>"; };
-		2E0E944A2263B54E00FCF6BE /* Window Spanish Translations.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = "Window Spanish Translations.strings"; sourceTree = "<group>"; };
 		2E0E944D2263B62E00FCF6BE /* google-translate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "google-translate.swift"; sourceTree = "<group>"; };
 		2E0E944F2263B7E000FCF6BE /* utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utils.swift; sourceTree = "<group>"; };
 		2E0E94512263C84000FCF6BE /* bleu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = bleu.swift; sourceTree = "<group>"; };
@@ -71,8 +69,6 @@
 				2E0E945B2264B3ED00FCF6BE /* genetic-algorithm.swift */,
 				2E0E944F2263B7E000FCF6BE /* utils.swift */,
 				2E0E94592263FF3600FCF6BE /* LongestCommonSubsequence.swift */,
-				2E0E94482263B54E00FCF6BE /* Window French Translations.strings */,
-				2E0E944A2263B54E00FCF6BE /* Window Spanish Translations.strings */,
 				2E0E943F2263B50800FCF6BE /* Products */,
 			);
 			sourceTree = "<group>";
