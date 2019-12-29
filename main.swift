@@ -2,17 +2,24 @@
 
 import Foundation
 
-
 enum Mode {
+    /// Translates the Strings using Google Translate without applying any post-processing
+    case unassistedTranslations
+    /// Translates the Strings using Google Translate and applies
+    /// machine-learning-based post-processing using an existing corpus.
+    case corpusAssistedTranslations(MachineLearningMode)
+}
+
+enum MachineLearningMode {
     case crossValidation
     case learnAndApplyMappings
 }
 
 
 /// In an actual production tool these would be command-line arguments
-let stringsFileName = "strings/Window Spanish Translations.strings"
-let destinationLanguage = "es"
-let mode = Mode.learnAndApplyMappings
+let stringsFileName = "strings/Inflation Calculator/ English Base Translations.strings"
+let destinationLanguage = "ar"
+let mode = Mode.unassistedTranslations
 
 
 // load the strings
@@ -112,7 +119,11 @@ func trainBestMappings(
 
 
 switch mode {
-case .crossValidation:
+case .unassistedTranslations:
+    print("Done (not using machine learning to post-process).")
+    break
+    
+case .corpusAssistedTranslations(.crossValidation):
     print("Training % \t Training Score \t Testing Score")
     
     // for every 10% from 0% to 100%,
@@ -134,7 +145,7 @@ case .crossValidation:
         print("\(testingTrainingRatio) \t \(averageTrainingScore) \t \(averageTestingScore) \t \(averageUnadjustedScore)")
     }
     
-case .learnAndApplyMappings:
+case .corpusAssistedTranslations(.learnAndApplyMappings):
     
     let results = trainBestMappings(
         referenceCorpus: referenceCorpus,

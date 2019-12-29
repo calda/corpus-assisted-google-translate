@@ -1,0 +1,119 @@
+/* Description that this is the most popular Inflation Calculator app on the App Store */
+"#1 Inflation Calculator" = "";
+
+/* Title of the screen that describes the application */
+"About" = "";
+
+/* Description that the app is always updated for the current year */
+"Always has the most recent data" = "";
+
+/* Currency of Australia */
+"Australian Dollar" = "";
+
+/* Currency of Brazil */
+"Brazilian Real" = "";
+
+/* Currency of the United Kingdom */
+"British Pound" = "";
+
+/* Currency of Canada */
+"Canadian Dollar" = "";
+
+/* Currency of China */
+"Chinese Yuan" = "";
+
+/* Currency of Colombia */
+"Colombian Peso" = "";
+
+/* Information that the app was created by Cal Stephens */
+"Created by Cal Stephens" = "";
+
+/* Description of the available data range for a currency. e.g. 'Data from 1980 to 2020'. */
+"Data from %1$@ to %2$@" = "";
+
+/* Title of the person who developer this app. Alternative translations could include 'Creator' or 'Designer'. */
+"Creator" = "";
+
+/* Currency of the European Union */
+"Euro" = "";
+
+/* App Store description */
+"Ever see a price from the past and want to how how much it would cost today? With Inflation Calculator, it's easy to discover the answer. Inflation Calculator lets you calculate the value of money throughout history. It supports 22 currencies from around the world, including the US Dollar, Euro, and more!" = "";
+
+/* Label that describes how data is typically collected from official government sources. */
+"Historical inflation data is compiled from various official sources." = "";
+
+/* Currency of India */
+"Indian Rupee" = "";
+
+/* Currency of Indonesia */
+"Indonesian Rupiah" = "";
+
+/* Short-hand name of the app */
+"Inflation Calc" = "";
+
+/* The name of the app 'Inflation Calculator', translated into the destination language */
+"Inflation Calculator" = "";
+
+/* Currency of Israel */
+"Israeli Sheqel" = "";
+
+/* Currency of Japan */
+"Japanese Yen" = "";
+
+/* Currency of Mexico */
+"Mexican Peso" = "";
+
+/* Currency of New Zealand */
+"New Zealand Dollar" = "";
+
+/* App store tags */
+"inflation,dollar,money,value,over time,time,history,historical,data,price,prices,year,cost,costs" = "";
+
+/* Currency of Norway */
+"Norwegian Krone" = "";
+
+/* Currency of Russia */
+"Russian Ruble" = "";
+
+/* Currency of Saudi Arabia */
+"Saudi Arabian Riyal" = "";
+
+/* Title of screen that lets the user select the active currency */
+"Select Currency" = "";
+
+/* Title of section that describes where data is sourced from */
+"Sources" = "";
+
+/* Currency of South Africa */
+"South African Rand" = "";
+
+/* Currency of South Korea */
+"South Korean Won" = "";
+
+/* Currency of Sweden */
+"Swedish Krona" = "";
+
+/* Currency of Switzerland */
+"Swiss Franc" = "";
+
+/* Typical app update description */
+"Thanks for using Inflation Calculator! This version adds data for 2020." = "";
+
+/* Currency of Turkey */
+"Turkish Lira" = "";
+
+/* Currency of the United States */
+"US Dollar" = "";
+
+/* Description that the app has 22 international currencies. Highlight the currencies most likely to be interested to users speaking that language. */
+"US Dollar, Euro, & 20 other currencies" = "";
+
+/* The current version of the app. e.g. Version 2.0 */
+"Version %@" = "";
+
+/* Title of button that opens the developer's website */
+"Visit Website" = "";
+
+/* Abbreviation for 'clear' that appears on a calculator. This should be two characters or fewer. */
+"c" = "";

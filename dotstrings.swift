@@ -15,7 +15,7 @@ struct StringsEntry {
 
 
 func readStringsFile(_ name: String) -> [StringsEntry]? {
-    guard let textContent = readFileIfPresent(name, using: .utf16) else {
+    guard let textContent = readFileIfPresent(name, using: .utf8) else {
         return nil
     }
     
@@ -33,8 +33,9 @@ func readStringsFile(_ name: String) -> [StringsEntry]? {
             let items = cleanedLine
                 .replacingOccurrences(of: "\"", with: "")
                 .replacingOccurrences(of: ";", with: "")
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                .components(separatedBy: " = ")
+                .components(separatedBy: "=")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
             
             guard let originalText = items.first, !originalText.isEmpty else {
                 continue
